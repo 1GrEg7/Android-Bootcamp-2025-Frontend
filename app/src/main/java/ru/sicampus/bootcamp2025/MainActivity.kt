@@ -14,6 +14,7 @@ import ru.sicampus.bootcamp2025.ui.navigation.Screen
 import ru.sicampus.bootcamp2025.ui.screens.AuthorizationScreen
 import ru.sicampus.bootcamp2025.ui.screens.EditProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.MainScreen
+import ru.sicampus.bootcamp2025.ui.screens.MapScreen
 import ru.sicampus.bootcamp2025.ui.screens.ProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.RegistrationScreen
 import ru.sicampus.bootcamp2025.ui.viewModels.EditProfileViewModel
@@ -24,22 +25,35 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContent {
-            EditProfileScreen(
-                onCancel = {},
-                onSave = {}
-            )
-            /*
+
+            //MapScreen()
             val navController = rememberNavController()
             NavHost(
                 navController = navController,
-                startDestination = Screen.Profile.route
+                startDestination = Screen.MainScreen.route
             ) {
+                composable(Screen.MainScreen.route) {
+                    MainScreen(
+                        toMapScreen = { navController.navigate(Screen.MapScreen.route) },
+                        toAuthorizationScreen = { navController.navigate(Screen.AuthorizationScreen.route) },
+                        toProfileScreen = { navController.navigate(Screen.Profile.route) }
+                    )
+                }
+                composable(Screen.MapScreen.route) {
+                    MapScreen(
+                        toMainScreen = {navController.navigate(Screen.MainScreen.route)}
+                    )
+                }
+            }
+                /*
                 composable(Screen.RegistrationScreen.route) {
                     RegistrationScreen(
                         onRegistre = { navController.navigate(Screen.MainScreen.route)},
                         onBack = { navController.popBackStack() },
                     )
                 }
+                */
+
                 /*
                 composable(Screen.AuthorizationScreen.route) {
                     AuthorizationScreen(
@@ -50,21 +64,15 @@ class MainActivity : ComponentActivity() {
 
                  */
 
-                composable(Screen.MainScreen.route) {
-                    MainScreen(
-                        //onCancel = { navController.navigate(Screen.Profile.route) },
-                        toAuthorizationScreen = { navController.navigate(Screen.AuthorizationScreen.route) },
-                        toProfileScreen = { navController.navigate(Screen.Profile.route)}
-                    )
-                }
 
+                /*
                 composable(Screen.Profile.route) {
                     ProfileScreen(
                         onEditClick = { navController.navigate(Screen.EditProfile.route) } ,
                         toMainScreen = { navController.navigate(Screen.MainScreen.route) }
                     )
                 }
-                /*
+
                 composable(Screen.EditProfile.route) {
                     val viewModel: EditProfileViewModel = viewModel()
                     val state = viewModel.state.collectAsState()
@@ -83,11 +91,13 @@ class MainActivity : ComponentActivity() {
 
                     )
                 }
-                */
 
-            }
+                 */
 
-             */
+
+
+
+
 
 
         }

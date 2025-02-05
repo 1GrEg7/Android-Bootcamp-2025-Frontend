@@ -1,5 +1,6 @@
 package ru.sicampus.bootcamp2025.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -37,6 +39,7 @@ import ru.sicampus.bootcamp2025.R
 
 @Composable
 fun MainScreen(
+    toMapScreen: ()-> Unit,
     toAuthorizationScreen:  () -> Unit,
     toProfileScreen:() -> Unit
 ){
@@ -160,8 +163,17 @@ fun MainScreen(
                 contentDescription = "Описание изображения")
 
             Box(contentAlignment = Alignment.Center){
-                Icon(painter = painterResource(id = R.drawable.map),
-                    contentDescription = "Описание изображения")
+                IconButton(
+                    onClick = {
+                        toMapScreen() },
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.map),
+                        contentDescription = "Карта",
+                        tint = Color.Black
+                    )
+                }
+
                 Icon(modifier = Modifier.padding(bottom = 5.dp),painter = painterResource(id = R.drawable.circleinmap),
                     contentDescription = "Описание изображения")
             }
