@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -13,16 +16,23 @@ import ru.sicampus.bootcamp2025.ui.screens.EditProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.MainScreen
 import ru.sicampus.bootcamp2025.ui.screens.ProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.RegistrationScreen
+import ru.sicampus.bootcamp2025.ui.viewModels.EditProfileViewModel
+import ru.sicampus.bootcamp2025.ui.viewModels.EditProfileViewModel.UState
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContent {
+            EditProfileScreen(
+                onCancel = {},
+                onSave = {}
+            )
+            /*
             val navController = rememberNavController()
             NavHost(
                 navController = navController,
-                startDestination = Screen.AuthorizationScreen.route
+                startDestination = Screen.Profile.route
             ) {
                 composable(Screen.RegistrationScreen.route) {
                     RegistrationScreen(
@@ -30,12 +40,15 @@ class MainActivity : ComponentActivity() {
                         onBack = { navController.popBackStack() },
                     )
                 }
+                /*
                 composable(Screen.AuthorizationScreen.route) {
                     AuthorizationScreen(
                         toRegistreScreen = {navController.navigate(Screen.RegistrationScreen.route)},
                         onSignIn = { navController.navigate(Screen.MainScreen.route) }
                     )
                 }
+
+                 */
 
                 composable(Screen.MainScreen.route) {
                     MainScreen(
@@ -51,15 +64,31 @@ class MainActivity : ComponentActivity() {
                         toMainScreen = { navController.navigate(Screen.MainScreen.route) }
                     )
                 }
+                /*
                 composable(Screen.EditProfile.route) {
+                    val viewModel: EditProfileViewModel = viewModel()
+                    val state = viewModel.state.collectAsState()
+
+
+                    if (state is UState.Success) {
+                            navController.navigate(Screen.Profile.route)
+                    }
+
+
                     EditProfileScreen(
                         onCancel = { navController.navigate(Screen.Profile.route) },
-                        onSave = { navController.popBackStack() },
+                        onSave = {
+                            navController.navigate(Screen.Profile.route)
+                        }
+
                     )
                 }
-
+                */
 
             }
+
+             */
+
 
         }
     }
