@@ -55,6 +55,7 @@ class MainActivity : ComponentActivity() {
                     EditProfileScreen(
                         onCancel = { navController.navigate(Screen.Profile.route) },
                         onSave = { navController.popBackStack() },
+                        toProfileScreen = {navController.navigate(Screen.Profile.route)}
                     )
                 }
 
