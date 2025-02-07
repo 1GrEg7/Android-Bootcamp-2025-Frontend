@@ -3,17 +3,16 @@ package ru.sicampus.bootcamp2025.ui.screens
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Point
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -26,166 +25,197 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.*
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.*
+import kotlin.math.sqrt
 import ru.sicampus.bootcamp2025.R
-
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewScreen() {
-//    MapScreen()
-//}
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.Polyline
 
 @Composable
 fun MapScreen(
-    toMainScreen:()->Unit
+    toMainScreen: () -> Unit
 ) {
-    var zoomLevel by remember { mutableFloatStateOf(10f) }//начальный зум
     val context = LocalContext.current
     var currentLocation by remember { mutableStateOf<LatLng?>(null) }
+    var nearestCenter by remember { mutableStateOf<LatLng?>(null) }
     val cameraPositionState = rememberCameraPositionState()
+    var selectedcenter by remember {mutableStateOf<LatLng?>(null)}
 
-    val locationPermissionRequest = rememberLauncherForActivityResult( //здесь получаем разрешение на
-                                                                      //использование геолокации
+    val centers = listOf(
+        LatLng(56.84609092607202, 60.65044826858674) , // Добрые руки
+        LatLng(55.82357395654006, 37.3166217820105), // Центр помощи детям
+        LatLng(59.93479819990618, 30.319239711127295), // Благотворительный фонд 'Надежда'
+        LatLng(55.75309602852054, 49.21457228385668), // Волонтерский центр 'Помощь'
+        LatLng(55.04297762282368, 82.91324048195861) // Помощь без границ
+    )
+
+    val center = listOf(
+        LatLng(56.84609092607202, 60.65044826858674) to "Добрые руки",
+        LatLng(55.82357395654006, 37.3166217820105) to "Центр помощи детям",
+        LatLng(59.93479819990618, 30.319239711127295) to "Благотворительный фонд 'Надежда'",
+        LatLng(55.75309602852054, 49.21457228385668) to "Волонтерский центр 'Помощь'",
+        LatLng(55.04297762282368, 82.91324048195861) to  "Помощь без границ"
+    )
+
+    // Запрос разрешений на геолокацию
+    val locationPermissionRequest = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
-        when {
-            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-                getLastLocation(context) { location ->
-                    currentLocation = location
-                    location.let {
-                        cameraPositionState.position = CameraPosition.fromLatLngZoom(it, 15f)
-                    }
-                }
-            }
-            permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-                getLastLocation(context) { location ->
-                    currentLocation = location
-                    location.let {
-                        cameraPositionState.position = CameraPosition.fromLatLngZoom(it, 12f)
-                    }
-                }
-            }
-        }
-    }
-
-    LaunchedEffect(Unit) { //здесь происходит проверка на имеющиееся разрешения
-        val permissionsToRequest = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-        if (permissionsToRequest.all {
-                ContextCompat.checkSelfPermission(context, it) == android.content.pm.PackageManager.PERMISSION_GRANTED
-            }) {
+        if (permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true) {
             getLastLocation(context) { location ->
                 currentLocation = location
-                location.let {
-                    cameraPositionState.position = CameraPosition.fromLatLngZoom(it, 15f)
-                }
+                nearestCenter = findNearestCenter(location, centers)
+                cameraPositionState.position = CameraPosition.fromLatLngZoom(location, 15f)
             }
-        } else {
-            locationPermissionRequest.launch(permissionsToRequest)
         }
     }
-    GoogleMap(
-        modifier = Modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState,
-        properties = MapProperties(isMyLocationEnabled = true)
-    ) {
-        currentLocation?.let { location ->
-            Marker(
-                state = MarkerState(position = location),
-                title = "Ваше местоположение"
-            )
-        }
-        val center = LatLng(56.84609092607202, 60.65044826858674)
-        Marker(
-            state = MarkerState(position = center),
-            title = "Добрые руки"
-        )
-        val center1 = LatLng(55.82357395654006, 37.3166217820105)
-        Marker(
-            state = MarkerState(position = center1),
-            title = "Центр помощи детям"
-        )
-        val center2 = LatLng(59.93479819990618, 30.319239711127295)
-        Marker(
-            state = MarkerState(position = center2),
-            title = "Благотворительный фонд 'Надежда' "
-        )
-        val center3 = LatLng(55.75309602852054, 49.21457228385668)
-        Marker(
-            state = MarkerState(position = center3),
-            title = "Волонтерский центр 'Помощь' "
-        )
-        val center4 = LatLng(55.04297762282368, 82.91324048195861)
-        Marker(
-            state = MarkerState(position = center4),
-            title = "Помощь без границ "
-        )
+
+    LaunchedEffect(Unit) {
+        locationPermissionRequest.launch(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
     }
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.BottomStart
-    ) {
-        IconButton(
-            onClick = { toMainScreen() },
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.BottomStart)
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.arrow),
-                contentDescription = "Значок назад",
-            )
-        }
-    }
-    Column(
-        modifier = Modifier
-            //.align(Alignment.TopStart)
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Button(onClick = {
-            zoomLevel += 1f
-            cameraPositionState.move(CameraUpdateFactory.zoomIn())
-        }) {
-            Text("Увеличить масштаб")
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        // Поле поиска
+        SearchWithDropdown { selectedLocation ->
+            currentLocation = selectedLocation
+            nearestCenter = findNearestCenter(selectedLocation, centers)
+            cameraPositionState.position = CameraPosition.fromLatLngZoom(selectedLocation, 15f)
         }
 
-        Button(onClick = {
-            zoomLevel -= 1f
-            cameraPositionState.move(CameraUpdateFactory.zoomOut())
-        }) {
-            Text("Уменьшить масштаб")
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Карта
+            GoogleMap(
+                modifier = Modifier.fillMaxSize(),
+                cameraPositionState = cameraPositionState,
+                properties = MapProperties(isMyLocationEnabled = true)
+            ) {
+                currentLocation?.let {
+                    Marker(
+                        state = MarkerState(position = it),
+                        title = "Ваше местоположение"
+                    )
+                }
+
+                center.forEach { (latlng, name) ->
+                    Marker(
+                        onClick = {
+                            selectedcenter = latlng
+                                  true},
+                        state = MarkerState(position = latlng),
+                        title = name
+                    )
+                    if (currentLocation!= null && selectedcenter!=null){
+                        Polyline(
+                            points = listOf(currentLocation!!, selectedcenter!!),
+                            color = Color.Green
+                        )
+                    }
+                }
+
+                // Линия до ближайшего центра
+                if (currentLocation != null && nearestCenter != null) {
+                    Polyline(
+                        points = listOf(currentLocation!!, nearestCenter!!),
+                        color = Color.Blue
+                    )
+                }
+
+
+            }
+
+
+            // Кнопка "Назад"
+            IconButton(
+                onClick = { toMainScreen() },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.BottomStart)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.arrow),
+                    contentDescription = "Назад"
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun SearchWithDropdown(
+    onLocationSelected: (LatLng) -> Unit
+) {
+    var textState by remember { mutableStateOf(TextFieldValue("")) }
+    var expanded by remember { mutableStateOf(false) }
+
+    val centers = listOf(
+        LatLng(56.84609092607202, 60.65044826858674) to "Добрые руки",
+        LatLng(55.82357395654006, 37.3166217820105) to "Центр помощи детям",
+        LatLng(59.93479819990618, 30.319239711127295) to "Благотворительный фонд 'Надежда'",
+        LatLng(55.75309602852054, 49.21457228385668) to "Волонтерский центр 'Помощь'",
+        LatLng(55.04297762282368, 82.91324048195861) to "Помощь без границ"
+    )
+
+    val filteredCenters = centers.filter {
+        it.second.contains(textState.text, ignoreCase = true)
+    }
+
+    Column(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        OutlinedTextField(
+            value = textState,
+            onValueChange = { newText ->
+                textState = newText
+                expanded = newText.text.isNotEmpty()
+            },
+            placeholder = { Text("Найти волонтерский центр") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            filteredCenters.forEach { (point, name) ->
+                DropdownMenuItem(
+                    text = { Text(name) },
+                    onClick = {
+                        textState = TextFieldValue(name)
+                        expanded = false
+                        onLocationSelected(point)
+                    }
+                )
+            }
         }
     }
 }
 
 @SuppressLint("MissingPermission")
-private fun getLastLocation(  //тут происходит получение последнего местоположения устройства
+private fun getLastLocation(
     context: Context,
     onSuccess: (LatLng) -> Unit
 ) {
-    val fusedLocationClient: FusedLocationProviderClient = //переменная,в которую мы cохраняем объект,позволяющий работать с местоположением
+    val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
     fusedLocationClient.lastLocation
         .addOnSuccessListener { location ->
             location?.let {
-                onSuccess(LatLng(it.latitude, it.longitude))//выполняется только после получения координат
+                onSuccess(LatLng(it.latitude, it.longitude))
             }
         }
         .addOnFailureListener { exception ->
@@ -193,8 +223,14 @@ private fun getLastLocation(  //тут происходит получение �
         }
 }
 
-// Для работы с координатами
-data class LatLng(
-    val latitude: Double,
-    val longitude: Double
-)
+// Поиск ближайшего центра
+private fun findNearestCenter(currentLocation: LatLng, centers: List<LatLng>): LatLng? {
+    return centers.minByOrNull { calculateDistance(currentLocation, it) }
+}
+
+// Расстояние между точками
+private fun calculateDistance(point1: LatLng, point2: LatLng): Double {
+    val dx = point1.latitude - point2.latitude
+    val dy = point1.longitude - point2.longitude
+    return sqrt(dx * dx + dy * dy)
+}
