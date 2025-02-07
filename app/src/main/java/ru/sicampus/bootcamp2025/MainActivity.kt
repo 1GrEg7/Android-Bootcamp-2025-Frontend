@@ -1,9 +1,11 @@
 package ru.sicampus.bootcamp2025
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -13,12 +15,18 @@ import ru.sicampus.bootcamp2025.ui.screens.EditProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.MainScreen
 import ru.sicampus.bootcamp2025.ui.screens.ProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.RegistrationScreen
+import ru.sicampus.bootcamp2025.ui.viewModels.MainScreenViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+
+
         setContent {
+            val viewModelMainScreen:MainScreenViewModel = viewModel()
+            viewModelMainScreen.getAllUsers()
             val navController = rememberNavController()
             NavHost(
                 navController = navController,
@@ -41,7 +49,8 @@ class MainActivity : ComponentActivity() {
                     MainScreen(
                         //onCancel = { navController.navigate(Screen.Profile.route) },
                         toAuthorizationScreen = { navController.navigate(Screen.AuthorizationScreen.route) },
-                        toProfileScreen = { navController.navigate(Screen.Profile.route)}
+                        toProfileScreen = { navController.navigate(Screen.Profile.route)},
+                        vm = viewModelMainScreen
                     )
                 }
 

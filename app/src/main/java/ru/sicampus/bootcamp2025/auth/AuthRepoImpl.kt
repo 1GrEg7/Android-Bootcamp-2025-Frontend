@@ -6,6 +6,7 @@ import ru.sicampus.bootcamp2025.domain.auth.AuthRepo
 class AuthRepoImpl: AuthRepo {
 
     override suspend fun register(login: String, password: String): Result<Unit> {
+
          return Result.failure(IllegalStateException("Not ready"))
     }
 

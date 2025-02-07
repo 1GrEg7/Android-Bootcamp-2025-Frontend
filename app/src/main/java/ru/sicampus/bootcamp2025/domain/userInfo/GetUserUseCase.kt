@@ -4,8 +4,8 @@ import ru.sicampus.bootcamp2025.data.UserDTO
 
 class GetUserUseCase(private val userRepo: UserRepo) {
 
-    suspend fun execute(): UserDTO {
-        return userRepo.fetchUser()
+    suspend fun execute(id:Int): UserDTO {
+        return userRepo.fetchUser(id)
     }
 
 }
