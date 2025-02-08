@@ -14,22 +14,32 @@ import androidx.navigation.compose.rememberNavController
 
 import ru.sicampus.bootcamp2025.ui.buildComponents.BuildComponentsViewModel
 import ru.sicampus.bootcamp2025.ui.navigation.Screen
+import ru.sicampus.bootcamp2025.ui.screens.AnotherProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.AuthorizationScreen
 import ru.sicampus.bootcamp2025.ui.screens.EditProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.ListScreen
 import ru.sicampus.bootcamp2025.ui.screens.ProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.RegistrationScreen
+
 import ru.sicampus.bootcamp2025.ui.viewModels.EditProfileViewModel
+
+
+  
+import ru.sicampus.bootcamp2025.ui.viewModels.AnotherProfileViewModel
+
 import ru.sicampus.bootcamp2025.ui.viewModels.ListScreenViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
         setContent {
             val viewModelListScreen:ListScreenViewModel = viewModel()
             val editProfileViewModel: EditProfileViewModel = viewModel()
             val viewModelBuildComponents: BuildComponentsViewModel = viewModel()
+
+            val anotherProfileViewModel: AnotherProfileViewModel = viewModel()
 
             viewModelListScreen.getAllUsers()
 
@@ -88,7 +98,9 @@ class MainActivity : ComponentActivity() {
                                        },
                         //toMapScreen = {navController.navigate(Screen.ListScreen.route)},
                         vm = viewModelListScreen,
-                        bottomMenuViewModel = viewModelBuildComponents
+                        bottomMenuViewModel = viewModelBuildComponents,
+                        toAnotherProfileScreen = {navController.navigate(Screen.AnotherProfileScreen.route)},
+                        anotherProfileViewModel = anotherProfileViewModel
                     )
                 }
 
@@ -139,6 +151,24 @@ class MainActivity : ComponentActivity() {
 
                     )
                 }
+
+                composable(
+                    Screen.AnotherProfileScreen.route,
+                    popEnterTransition = { EnterTransition.None },
+                    popExitTransition = { ExitTransition.None },
+                    enterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None }
+                ) {
+
+                    AnotherProfileScreen(
+                        toListScreen = {
+                            navController.navigate(Screen.ListScreen.route)
+                            viewModelBuildComponents.changeIconColorToWhite("listScreen")
+                        },
+                        anotherProfileViewModel = anotherProfileViewModel
+                    )
+                }
+
 
 
             }

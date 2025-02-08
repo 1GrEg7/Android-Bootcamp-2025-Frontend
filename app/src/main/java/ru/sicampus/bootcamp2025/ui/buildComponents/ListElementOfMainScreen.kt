@@ -1,7 +1,9 @@
 package ru.sicampus.bootcamp2025.ui.buildComponents
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,20 +27,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.sicampus.bootcamp2025.R
+import ru.sicampus.bootcamp2025.ui.viewModels.AnotherProfileViewModel
 
 @Composable
-fun listElement(_name:String, _date:String, _address:String){
+fun listElement(_name:String, _date:String, _address:String, toAnotherProfileScreen: () ->Unit, anotherProfileViewModel: AnotherProfileViewModel, userId:Int){
     val name = _name.drop(1).dropLast(1)
     val date = _date.drop(1).dropLast(1)
     val address = _address.drop(1).dropLast(1)
     Column(
         modifier = Modifier.fillMaxWidth()
+            .clickable {
+                toAnotherProfileScreen()
+                anotherProfileViewModel.getUserById(userId)
+            }
             .padding(20.dp)
             .border(
                 width = 2.dp,
                 color = Color.LightGray,
                 shape = RoundedCornerShape(16.dp)
-            ),
+            )
+
+        ,
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
