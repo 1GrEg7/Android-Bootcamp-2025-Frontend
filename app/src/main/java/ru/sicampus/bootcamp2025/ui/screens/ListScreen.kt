@@ -1,5 +1,6 @@
 package ru.sicampus.bootcamp2025.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,13 +29,14 @@ import ru.sicampus.bootcamp2025.R
 import ru.sicampus.bootcamp2025.ui.buildComponents.BottomMenu
 import ru.sicampus.bootcamp2025.ui.buildComponents.BuildComponentsViewModel
 import ru.sicampus.bootcamp2025.ui.buildComponents.listElement
+import ru.sicampus.bootcamp2025.ui.viewModels.AnotherProfileViewModel
 import ru.sicampus.bootcamp2025.ui.viewModels.ListScreenViewModel
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewListScreenScreen() {
-    ListScreen()
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewListScreenScreen() {
+//    ListScreen()
+//}
 
 
 @Composable
@@ -44,9 +46,12 @@ fun ListScreen(
     //toMapScreen: () -> Unit,
     toListScreen: () -> Unit ={},
     vm: ListScreenViewModel = viewModel(),
-    bottomMenuViewModel: BuildComponentsViewModel = viewModel()
+    bottomMenuViewModel: BuildComponentsViewModel = viewModel(),
+    anotherProfileViewModel: AnotherProfileViewModel,
+    toAnotherProfileScreen: () -> Unit = {},
 ){
     Column() {
+
         Row(
             modifier = Modifier.fillMaxSize().weight(1f),
             horizontalArrangement = Arrangement.Center,
@@ -69,12 +74,26 @@ fun ListScreen(
         ){
             OutlinedTextField(
                 modifier = Modifier.padding(top = 10.dp),
-                value = "Введите центр волонтеров",
-                onValueChange = {  },
+                value = vm.editTextFieldSearch.value,
+                onValueChange = { vm.editTextFieldSearch.value = it },
                 shape = RoundedCornerShape(8.dp),
+                placeholder = {
+                    Text(
+                        text = "Введите центр волонтеров",
+                        color = Color.Gray
+                    )
+                }
             )
             Icon(
-                modifier = Modifier.padding(start = 10.dp,top = 5.dp),
+                modifier = Modifier.padding(start = 10.dp,top = 5.dp).clickable {
+                    if (vm.editTextFieldSearch.value ==""){
+                        vm.returnFullUserList()
+                    }else{
+                        vm.returnFullUserList()
+                        vm.getUsersByCenterName(vm.editTextFieldSearch.value)
+                    }
+
+                },
                 painter = painterResource(id = R.drawable.search_icon),
                 contentDescription = "Описание изображения",
                 tint = Color.Gray
@@ -87,7 +106,7 @@ fun ListScreen(
             //Log.d("1212121PPPP", list.value.orEmpty().toString())
             LazyColumn {
                 items(list.value.orEmpty()){ item ->
-                    listElement(_name = item.firstName, _date = item.email, _address = item.phoneNumber)
+                    listElement(_name = item.firstName, _date = item.email, _address = item.volunteerCenter, toAnotherProfileScreen = { toAnotherProfileScreen()}, anotherProfileViewModel = anotherProfileViewModel, userId = item.id )
                 }
             }
 

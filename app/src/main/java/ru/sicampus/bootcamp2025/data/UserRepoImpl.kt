@@ -35,13 +35,13 @@ class UserRepoImpl: UserRepo {
                 val response = getAllUsers()
 
 
-                val listType = object : TypeToken<List<UserDTO>>() {}.type
+                 val listType = object : TypeToken<List<UserDTO>>() {}.type
 
                  userList = Gson().fromJson(response, listType)
 
 
             }.join()
-            Log.d("12121212", userList.toString())
+
 
         }
         return userList
@@ -72,7 +72,7 @@ fun getAllUsers():String?{
             Log.d("111111111111111111","Ошибка при выполнении запроса: ${e.message}")
             result = null
         }
-
+        Log.d("UUUUUUU",result.toString())
         return result
 }
 
@@ -81,7 +81,8 @@ fun getUser(id:Int):String?{
     var result: String? = ""
     // Формируем запрос по адресу API
     val request = Request.Builder()
-        .url("http://localhost:8080/api/users/$id")
+        .url("http://192.168.207.239:8080/api/users/$id")
+
         .build()
 
     try {
