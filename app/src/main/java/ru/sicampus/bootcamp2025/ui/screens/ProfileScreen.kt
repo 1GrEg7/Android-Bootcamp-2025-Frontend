@@ -32,9 +32,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.sicampus.bootcamp2025.R
 import ru.sicampus.bootcamp2025.ui.buildComponents.BottomMenu
 import ru.sicampus.bootcamp2025.ui.buildComponents.BuildComponentsViewModel
+import ru.sicampus.bootcamp2025.ui.viewModels.EditProfileViewModel
 
 //@Preview(showBackground = true)
 //@Composable
@@ -47,9 +49,9 @@ fun ProfileScreen(
     onEditClick: () -> Unit,
     toAuthorizationScreen: () -> Unit,
     toProfileScreen: () -> Unit,
-   // toMapScreen: () -> Unit,
     toListScreen: () -> Unit,
-    bottomMenuViewModel: BuildComponentsViewModel
+    bottomMenuViewModel: BuildComponentsViewModel,
+    vm: EditProfileViewModel
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -108,7 +110,7 @@ fun ProfileScreen(
                 contentAlignment = Alignment.Center
             ){
                 Text(
-                    text = "Анастасия Волочкова",
+                    text = "${vm.firstName.value} ${vm.lastName.value} ",
                     fontSize = 18.sp
                     )
 
@@ -128,7 +130,7 @@ fun ProfileScreen(
                     contentAlignment = Alignment.Center
                 ){
                     Text(
-                        text = "Стаж 5 лет",
+                        text = "Стаж ${vm.experience.value}лет",
                         fontSize = 18.sp)
                 }
                 Box(
@@ -145,8 +147,8 @@ fun ProfileScreen(
         Column(modifier = Modifier.fillMaxSize().weight(4f).background(Color.White)) {
             Column(modifier = Modifier.padding(40.dp)) {
                 InfoItem("Электронная почта", "example@mail.ru")
-                InfoItem("Возраст", "22")
-                InfoItem("О себе", "eавдлыджлыждплыдапыл\ndslkfdkjflskdjdflkjlksjfkljfaldskj\nsdkjfkajdlkajfkjfkads\nadjshfsdfjsnfjaskdhfkjafhakjfhkjadfh ")
+                InfoItem("Возраст", vm.age.value)
+                InfoItem("О себе", vm.aboutMe.value)
 
             }
         }
@@ -178,6 +180,7 @@ fun InfoItem(title: String, text: String) {
     Text(
         text = text,
         fontSize = 18.sp,
+        color = Color.Black.copy(0.7f)
     )
     Spacer(modifier = Modifier.size(15.dp))
 }

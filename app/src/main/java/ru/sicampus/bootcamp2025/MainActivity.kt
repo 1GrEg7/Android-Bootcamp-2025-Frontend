@@ -19,21 +19,16 @@ import ru.sicampus.bootcamp2025.ui.screens.EditProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.ListScreen
 import ru.sicampus.bootcamp2025.ui.screens.ProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.RegistrationScreen
+import ru.sicampus.bootcamp2025.ui.viewModels.EditProfileViewModel
 import ru.sicampus.bootcamp2025.ui.viewModels.ListScreenViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-
-
-
-
-
         setContent {
-
             val viewModelListScreen:ListScreenViewModel = viewModel()
-
+            val editProfileViewModel: EditProfileViewModel = viewModel()
             val viewModelBuildComponents: BuildComponentsViewModel = viewModel()
 
             viewModelListScreen.getAllUsers()
@@ -117,7 +112,9 @@ class MainActivity : ComponentActivity() {
                             navController.navigate(Screen.Profile.route)
                             viewModelBuildComponents.changeIconColorToWhite("profileScreen")
                                           },
-                        bottomMenuViewModel = viewModelBuildComponents
+                        bottomMenuViewModel = viewModelBuildComponents,
+                        vm = editProfileViewModel
+
                        // toMapScreen = {}
                     )
                 }
@@ -128,14 +125,17 @@ class MainActivity : ComponentActivity() {
                     enterTransition = { EnterTransition.None },
                     exitTransition = { ExitTransition.None }
                 ) {
+
                     EditProfileScreen(
                         onCancel = { navController.navigate(Screen.Profile.route) },
                         onSave = { navController.popBackStack() },
+
                         toProfileScreen =
                         {
-                            navController.navigate(Screen.Profile.route);
+                            navController.navigate(Screen.Profile.route)
                             viewModelBuildComponents.changeIconColorToWhite("profileScreen")
                         },
+                        editProfileViewModel
 
                     )
                 }
