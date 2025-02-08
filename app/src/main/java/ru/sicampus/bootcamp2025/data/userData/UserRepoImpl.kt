@@ -1,4 +1,4 @@
-package ru.sicampus.bootcamp2025.data
+package ru.sicampus.bootcamp2025.data.userData
 
 import android.util.Log
 import com.google.gson.Gson
@@ -12,7 +12,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import ru.sicampus.bootcamp2025.domain.userInfo.UserRepo
 import java.io.IOException
-import kotlin.concurrent.thread
 
 class UserRepoImpl: UserRepo {
     override suspend fun fetchUser(id:Int): UserDTO {
@@ -31,7 +30,6 @@ class UserRepoImpl: UserRepo {
         var userList: List<UserDTO> = listOf()
         withContext(Dispatchers.IO) {
             launch {
-                delay(1000L)
                 val response = getAllUsers()
 
 
@@ -55,7 +53,7 @@ fun getAllUsers():String?{
         var result: String? = ""
         // Формируем запрос по адресу API
         val request = Request.Builder()
-            .url("http://192.168.207.239:8080/api/users")
+            .url("http://192.168.0.16:8080/api/users")
             .build()
 
         try {
@@ -81,7 +79,7 @@ fun getUser(id:Int):String?{
     var result: String? = ""
     // Формируем запрос по адресу API
     val request = Request.Builder()
-        .url("http://192.168.207.239:8080/api/users/$id")
+        .url("http://192.168.0.16:8080/api/users/$id")
 
         .build()
 

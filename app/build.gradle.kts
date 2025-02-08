@@ -105,4 +105,10 @@ dependencies {
     implementation ("com.google.android.gms:play-services-location:18.0.0")
 
 
+    implementation ("io.ktor:ktor-client-core:2.2.4")
+
+    // Движок для Android
+    implementation ("io.ktor:ktor-client-android:2.2.4")
+
+
 }

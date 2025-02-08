@@ -46,7 +46,7 @@ fun MapScreen(
 ) {
 
     val context = LocalContext.current
-    var currentLocation by remember { mutableStateOf<LatLng?>(null) }
+    var currentLocation by remember { mutableStateOf<LatLng>(LatLng(1.0,1.0)) }
     var nearestCenter by remember { mutableStateOf<LatLng?>(null) }
     val cameraPositionState = rememberCameraPositionState()
     var selectedcenter by remember {mutableStateOf<LatLng?>(null)}
@@ -67,11 +67,7 @@ fun MapScreen(
         LatLng(55.75309602852054, 49.21457228385668) to "Волонтерский центр 'Помощь'",
         LatLng(55.04297762282368, 82.91324048195861) to  "Помощь без границ"
     )
-    val cent = listOf(
-        Center("Центр 1", LatLng(55.7580, 37.6175)),
-        Center("Центр 2", LatLng(55.7520, 37.6150)),
-        Center("Центр 3", LatLng(55.7600, 37.6200))
-    )
+
 
     // Запрос разрешений на геолокацию
     val locationPermissionRequest = rememberLauncherForActivityResult(
@@ -126,18 +122,18 @@ fun MapScreen(
                         )
                     }
                 }
-                if (currentLocation != null && nearestCenter != null) {
+                if (nearestCenter != null) {
                     Polyline(
                         points = listOf(currentLocation!!, nearestCenter!!),
                         color = Color.Blue
                     )
                 }
 
-                Box(
-                    modifier = Modifier.padding(16.dp)
-                ){
-                    findAllCentersWithDistances(currentLocation,cent)
-                }
+//                Box(
+//                    modifier = Modifier.padding(16.dp)
+//                ){
+//                    findAllCentersWithDistances(currentLocation,cent)
+//                }
 
 
             }

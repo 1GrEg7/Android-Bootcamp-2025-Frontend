@@ -2,6 +2,7 @@ package ru.sicampus.bootcamp2025.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,12 +45,13 @@ import ru.sicampus.bootcamp2025.ui.viewModels.ListScreenViewModel
 fun ListScreen(
     toAuthorizationScreen: () -> Unit ={},
     toProfileScreen: () -> Unit = {},
-    //toMapScreen: () -> Unit,
+    toMapScreen: () -> Unit,
     toListScreen: () -> Unit ={},
     vm: ListScreenViewModel = viewModel(),
     bottomMenuViewModel: BuildComponentsViewModel = viewModel(),
     anotherProfileViewModel: AnotherProfileViewModel,
     toAnotherProfileScreen: () -> Unit = {},
+    toCentersScreen: () ->Unit
 ){
     Column() {
 
@@ -57,7 +60,29 @@ fun ListScreen(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ){
-            Text(modifier = Modifier,text ="Volunteer",fontSize = 40.sp, color = Color.Red)
+            Box(modifier = Modifier.weight(1f)){
+
+            }
+            Box(
+                modifier = Modifier.weight(5f),
+                contentAlignment = Alignment.Center
+            ){
+                Text(modifier = Modifier,text ="Volunteer",fontSize = 40.sp, color = Color.Red)
+            }
+
+            Box(
+                modifier = Modifier.weight(1f)
+                    .clickable {
+                        toCentersScreen()
+                    }
+            ){
+                Icon(
+                    painter = painterResource(id = R.drawable.centers),
+                    contentDescription = "Описание изображения",
+                    tint = Color.Black
+                )
+            }
+
         }
         Row(
             modifier = Modifier.fillMaxSize().weight(1f),
@@ -117,7 +142,7 @@ fun ListScreen(
 
 
        BottomMenu(
-           //toMapScreen =  toMapScreen,
+           toMapScreen =  { toMapScreen()},
            toProfileScreen = { toProfileScreen() },
            toAuthorizationScreen ={toAuthorizationScreen()} ,
            toListScreen = {toListScreen()},

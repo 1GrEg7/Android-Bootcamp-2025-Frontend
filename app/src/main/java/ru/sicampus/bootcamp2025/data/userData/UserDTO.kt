@@ -1,4 +1,4 @@
-package ru.sicampus.bootcamp2025.data
+package ru.sicampus.bootcamp2025.data.userData
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserDTO (
-    @SerialName("firstName")
+    @SerialName("id")
     val id: Int,
     @SerialName("firstName")
     val firstName: String,

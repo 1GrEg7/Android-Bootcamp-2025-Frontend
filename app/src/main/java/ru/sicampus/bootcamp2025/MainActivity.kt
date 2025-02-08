@@ -16,8 +16,10 @@ import ru.sicampus.bootcamp2025.ui.buildComponents.BuildComponentsViewModel
 import ru.sicampus.bootcamp2025.ui.navigation.Screen
 import ru.sicampus.bootcamp2025.ui.screens.AnotherProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.AuthorizationScreen
+import ru.sicampus.bootcamp2025.ui.screens.CentersScreen
 import ru.sicampus.bootcamp2025.ui.screens.EditProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.ListScreen
+import ru.sicampus.bootcamp2025.ui.screens.MapScreen
 import ru.sicampus.bootcamp2025.ui.screens.ProfileScreen
 import ru.sicampus.bootcamp2025.ui.screens.RegistrationScreen
 
@@ -26,6 +28,7 @@ import ru.sicampus.bootcamp2025.ui.viewModels.EditProfileViewModel
 
   
 import ru.sicampus.bootcamp2025.ui.viewModels.AnotherProfileViewModel
+import ru.sicampus.bootcamp2025.ui.viewModels.CentersViewModel
 
 import ru.sicampus.bootcamp2025.ui.viewModels.ListScreenViewModel
 
@@ -38,10 +41,12 @@ class MainActivity : ComponentActivity() {
             val viewModelListScreen:ListScreenViewModel = viewModel()
             val editProfileViewModel: EditProfileViewModel = viewModel()
             val viewModelBuildComponents: BuildComponentsViewModel = viewModel()
+            val centersViewModel:CentersViewModel = viewModel()
 
             val anotherProfileViewModel: AnotherProfileViewModel = viewModel()
 
             viewModelListScreen.getAllUsers()
+            centersViewModel.getAllCenters()
 
             val navController = rememberNavController()
             NavHost(
@@ -100,7 +105,9 @@ class MainActivity : ComponentActivity() {
                         vm = viewModelListScreen,
                         bottomMenuViewModel = viewModelBuildComponents,
                         toAnotherProfileScreen = {navController.navigate(Screen.AnotherProfileScreen.route)},
-                        anotherProfileViewModel = anotherProfileViewModel
+                        toMapScreen = { navController.navigate(Screen.MapScreen.route)},
+                        anotherProfileViewModel = anotherProfileViewModel,
+                        toCentersScreen = { navController.navigate(Screen.CentersScreen.route) }
                     )
                 }
 
@@ -125,9 +132,9 @@ class MainActivity : ComponentActivity() {
                             viewModelBuildComponents.changeIconColorToWhite("profileScreen")
                                           },
                         bottomMenuViewModel = viewModelBuildComponents,
-                        vm = editProfileViewModel
+                        vm = editProfileViewModel,
+                        toMapScreen = { navController.navigate(Screen.MapScreen.route)}
 
-                       // toMapScreen = {}
                     )
                 }
                 composable(
@@ -166,6 +173,35 @@ class MainActivity : ComponentActivity() {
                             viewModelBuildComponents.changeIconColorToWhite("listScreen")
                         },
                         anotherProfileViewModel = anotherProfileViewModel
+                    )
+                }
+
+                composable(
+                    Screen.MapScreen.route,
+                    popEnterTransition = { EnterTransition.None },
+                    popExitTransition = { ExitTransition.None },
+                    enterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None }
+                ) {
+                    MapScreen(
+                        toMainScreen = {
+                            navController.navigate(Screen.ListScreen.route)
+                        },
+                    )
+                }
+
+                composable(
+                    Screen.CentersScreen.route,
+                    popEnterTransition = { EnterTransition.None },
+                    popExitTransition = { ExitTransition.None },
+                    enterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None }
+                ) {
+                    CentersScreen(
+                        toListScreen = {
+                            navController.navigate(Screen.ListScreen.route)
+                        },
+                        centersViewModel = centersViewModel
                     )
                 }
 

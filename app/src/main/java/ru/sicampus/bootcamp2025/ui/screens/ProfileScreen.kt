@@ -50,6 +50,7 @@ fun ProfileScreen(
     toAuthorizationScreen: () -> Unit,
     toProfileScreen: () -> Unit,
     toListScreen: () -> Unit,
+    toMapScreen: () -> Unit,
     bottomMenuViewModel: BuildComponentsViewModel,
     vm: EditProfileViewModel
 ) {
@@ -130,7 +131,7 @@ fun ProfileScreen(
                     contentAlignment = Alignment.Center
                 ){
                     Text(
-                        text = "Стаж ${vm.experience.value}лет",
+                        text = "Стаж: ${vm.experience.value}г",
                         fontSize = 18.sp)
                 }
                 Box(
@@ -158,7 +159,8 @@ fun ProfileScreen(
             toProfileScreen = { toProfileScreen() } ,
             toAuthorizationScreen = { toAuthorizationScreen() },
             toListScreen = { toListScreen() },
-            vm = bottomMenuViewModel
+            vm = bottomMenuViewModel,
+            toMapScreen = {toMapScreen()}
         )
 
     }

@@ -27,7 +27,7 @@ fun BottomMenu(
     modifier: Modifier = Modifier,
     toAuthorizationScreen: () -> Unit,
     toProfileScreen: () -> Unit,
-    //toMapScreen: () -> Unit,
+    toMapScreen: () -> Unit,
     toListScreen: () -> Unit,
     vm: BuildComponentsViewModel
 ){
@@ -63,7 +63,7 @@ fun BottomMenu(
 
         Box(
             contentAlignment = Alignment.Center,
-            //modifier = Modifier.clickable { toMapScreen() }
+            modifier = Modifier.clickable { toMapScreen() }
         ){
             Icon(
                 painter = painterResource(id = R.drawable.map),
