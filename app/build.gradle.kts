@@ -99,4 +99,9 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.google.code.gson:gson:2.8.9")
 
+    //для работы с камерой
+    implementation("androidx.camera:camera-camera2:1.2.3")
+    implementation("androidx.camera:camera-lifecycle:1.2.3")
+    implementation("androidx.camera:camera-view:1.3.0-beta01")
+    implementation("io.coil-kt:coil-compose:2.2.2")
 }

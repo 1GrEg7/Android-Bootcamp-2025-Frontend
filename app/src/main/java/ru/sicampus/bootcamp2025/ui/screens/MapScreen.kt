@@ -73,7 +73,6 @@ fun MapScreen(
         Center("Центр 3", LatLng(55.7600, 37.6200))
     )
 
-    // Запрос разрешений на геолокацию
     val locationPermissionRequest = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->

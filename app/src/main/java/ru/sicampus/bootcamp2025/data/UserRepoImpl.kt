@@ -55,7 +55,7 @@ fun getAllUsers():String?{
         var result: String? = ""
         // Формируем запрос по адресу API
         val request = Request.Builder()
-            .url("http://192.168.207.239:8080/api/users")
+            .url("http://192.168.56.1:8080/api/users")
             .build()
 
         try {
