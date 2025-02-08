@@ -13,7 +13,7 @@ import ru.sicampus.bootcamp2025.domain.userInfo.GetAllUsersUseCase
 import ru.sicampus.bootcamp2025.domain.userInfo.GetUserUseCase
 import ru.sicampus.bootcamp2025.domain.userInfo.UserRepo
 
-class MainScreenViewModel: ViewModel() {
+class ListScreenViewModel: ViewModel() {
     private val _user = MutableStateFlow<UserDTO?>(null)
     val user = _user.asStateFlow()
 

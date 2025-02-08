@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import ru.sicampus.bootcamp2025.R
+import ru.sicampus.bootcamp2025.ui.buildComponents.BottomMenu
+import ru.sicampus.bootcamp2025.ui.buildComponents.BuildComponentsViewModel
 
 //@Preview(showBackground = true)
 //@Composable
@@ -43,7 +45,11 @@ import ru.sicampus.bootcamp2025.R
 @Composable
 fun ProfileScreen(
     onEditClick: () -> Unit,
-    toMainScreen: () -> Unit
+    toAuthorizationScreen: () -> Unit,
+    toProfileScreen: () -> Unit,
+   // toMapScreen: () -> Unit,
+    toListScreen: () -> Unit,
+    bottomMenuViewModel: BuildComponentsViewModel
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -58,7 +64,7 @@ fun ProfileScreen(
                         painter = painterResource(R.drawable.arrow),
                         contentDescription = "",
                         modifier = Modifier.clickable {
-                            toMainScreen()
+                            toListScreen()
                         }
                         )
                 }
@@ -144,6 +150,14 @@ fun ProfileScreen(
 
             }
         }
+
+        BottomMenu(
+           // toMapScreen =  toMapScreen,
+            toProfileScreen = { toProfileScreen() } ,
+            toAuthorizationScreen = { toAuthorizationScreen() },
+            toListScreen = { toListScreen() },
+            vm = bottomMenuViewModel
+        )
 
     }
 

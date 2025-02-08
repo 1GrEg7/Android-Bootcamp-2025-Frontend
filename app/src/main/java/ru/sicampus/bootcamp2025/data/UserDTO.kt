@@ -6,9 +6,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UserDTO (
-    @SerialName("username") //можно потом поменять если что
-    val username: String,
-    @SerialName("emain")
+    @SerialName("firstName") //можно потом поменять если что
+    val firstName: String,
+    @SerialName("email")
     val email: String,
     @SerialName("phoneNumber")
     val phoneNumber: String
