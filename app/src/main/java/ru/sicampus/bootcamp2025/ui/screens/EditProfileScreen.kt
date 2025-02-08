@@ -1,6 +1,8 @@
 package ru.sicampus.bootcamp2025.ui.screens
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,10 +15,14 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Icon
+import androidx.compose.material.TextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -34,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import ru.sicampus.bootcamp2025.R
 
 //@Preview(showBackground = true)
@@ -45,204 +52,157 @@ import ru.sicampus.bootcamp2025.R
 @Composable
 fun EditProfileScreen(
     onCancel: () -> Unit,
-    onSave: () -> Unit
+    onSave: () -> Unit,
+    toProfileScreen: () -> Unit
 ) {
-    var name = remember { mutableStateOf("") }
-    var lastName = remember { mutableStateOf("") }
-    var age = remember { mutableStateOf("") }
-    var experience = remember { mutableStateOf("") }
-    var bio =  remember { mutableStateOf("") }
+    Column(modifier = Modifier.fillMaxSize()) {
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(288.dp)
-                .background(
-                    color = Color(0xFFC37B5C),
-                )
-        ) {
-            Text(
-                text = "Профиль",
-                style = MaterialTheme.typography.headlineLarge,
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 56.dp),
-                textAlign = TextAlign.Center
-            )
-
-            Image(
-                painter = painterResource(R.drawable.avatar),
-                contentDescription = "Аватар",
-                modifier = Modifier
-                    .size(130.dp)
-                    .align(Alignment.TopCenter)
-                    .offset(y = 115.dp)
-                    .clip(CircleShape)
-            )
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .padding(top = 306.dp,start = 32.dp)
-                .align(Alignment.Center)
-
-        ) {
-
-            Text(
-                text= "Имя",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(start = 60.dp )
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            OutlinedTextField(
-                value = name.value,
-                onValueChange = { name.value = it },
-                modifier = Modifier.width(280.dp)
-                    .height(50.dp)
-                    .padding(start= 60.dp) ,
-                shape = RoundedCornerShape(8.dp),
-                placeholder = {
-                    Text(
-                        text = "Введите имя",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text= "Фамилия",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(start = 60.dp )
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            OutlinedTextField(
-                value = lastName.value,
-                onValueChange = { lastName.value = it },
-                modifier = Modifier.width(280.dp)
-                    .height(50.dp)
-                    .padding(start= 60.dp) ,
-                shape = RoundedCornerShape(8.dp),
-                label = {
-                    Text(
-                        text = "Введите фамилию",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text= "Возраст",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(start = 60.dp )
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            OutlinedTextField(
-                value = age.value,
-                onValueChange = { age.value = it },
-                modifier = Modifier.width(280.dp)
-                    .height(50.dp)
-                    .padding(start= 60.dp) ,
-                shape = RoundedCornerShape(8.dp),
-                label = {
-                    Text(
-                        text = "Введите возраст",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text= "Стаж",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(start = 60.dp )
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            OutlinedTextField(
-                value = experience.value,
-                onValueChange = { experience.value = it },
-                modifier = Modifier.width(280.dp)
-                    .height(50.dp)
-                    .padding(start= 60.dp) ,
-                shape = RoundedCornerShape(8.dp),
-                label = {
-                    Text(
-                        text = "Введите стаж",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text= "О себе",
-                fontSize = 16.sp,
-                modifier = Modifier.padding(start = 60.dp )
-            )
-            Spacer(modifier = Modifier.height(5.dp))
-            OutlinedTextField(
-                value = bio.value,
-                onValueChange = { bio.value = it },
-                modifier = Modifier.width(280.dp)
-                    .height(90.dp)
-                    .padding(start= 60.dp) ,
-                shape = RoundedCornerShape(8.dp),
-                label = {
-                    Text(
-                        text = "Напишите о себе",
-                        style = MaterialTheme.typography.bodyMedium
-
-                    )
-                }
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
+        Column(modifier = Modifier.fillMaxSize().weight(2f).background(Color(0xFFC37B5C))) {
 
             Row(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(24.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Button(
-                    onClick = onCancel,
-                    modifier = Modifier.width(140.dp)
-                        .height(40.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = Color(0xFF757575),
-                        contentColor = Color.White,
-                        disabledContainerColor = Color.LightGray,
-                        disabledContentColor = Color.Gray
-                    ),
-                    shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxSize().weight(2f).padding(top = 30.dp),
 
-                ) {
-                    Text("Отменить")
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.arrow),
+                    contentDescription = "",
+                    modifier = Modifier.weight(1f).wrapContentSize().clickable {
+                        toProfileScreen()
+                    }
+                )
+                Box(
+                    modifier = Modifier.weight(3f).fillMaxSize().padding(end = 5.dp),
+                    contentAlignment = Alignment.TopCenter
+                    ){
+                    Text(
+                        text = "Профиль",
+                        fontSize = 30.sp
+                    )
                 }
 
+                Text("", modifier = Modifier.weight(0.9f).fillMaxSize())
+            }
+
+
+            Box(modifier = Modifier.fillMaxSize().weight(3f)){
+                Image(
+                    modifier = Modifier.fillMaxSize().zIndex(0f),
+                    painter = painterResource(R.drawable.avatar),
+                    contentDescription = ""
+                )
+                Box(modifier = Modifier.fillMaxSize().zIndex(1f), contentAlignment = Alignment.BottomCenter){
+                    Icon(
+                        modifier = Modifier.align(Alignment.BottomCenter).size(30.dp),
+                        painter = painterResource(R.drawable.add_plus),
+                        contentDescription = ""
+                    )
+                }
+            }
+
+
+        }
+
+        Column(
+            modifier = Modifier.fillMaxSize().weight(5f).background(Color.White)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            TextAndField(modifier = Modifier.padding(top = 30.dp), text = "Имя")
+
+            TextAndField(modifier = Modifier.padding(top = 30.dp), text = "Фамилия")
+
+            TextAndField(modifier = Modifier.padding(top = 30.dp), text = "Возраст")
+
+            TextAndField(modifier = Modifier.padding(top = 30.dp), text = "Стаж")
+
+            TextAndField(modifier = Modifier.padding(top = 30.dp), text = "О себе")
+
+
+            Spacer(Modifier.size(40.dp))
+            Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.SpaceAround) {
                 Button(
-                    onClick = onSave,
+                    onClick = {}, //onSave,
                     modifier = Modifier.width(140.dp)
-                        .height(40.dp),
+                        .height(40.dp).clickable {
+                            onCancel()
+                        },
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = Color(0xFFC94027),
                         contentColor = Color.White,
                         disabledContainerColor = Color.LightGray,
                         disabledContentColor = Color.Gray
                     ),
-                    shape = RoundedCornerShape(8.dp)
-                ) {
+                    shape = RoundedCornerShape(8.dp))
+                {
+                    Text("Отменить")
+                }
+                Button(
+                    onClick = {}, //onSave,
+                    modifier = Modifier.width(140.dp)
+                        .height(40.dp)
+                        .clickable {
+                            onSave()
+                        },
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = Color(0xFF47A76A),
+                        contentColor = Color.White,
+                        disabledContainerColor = Color.LightGray,
+                        disabledContentColor = Color.Gray
+                    ),
+                    shape = RoundedCornerShape(8.dp))
+                {
                     Text("Сохранить")
                 }
             }
 
+            Spacer(Modifier.size(40.dp))
         }
+
+
+
     }
+
+
+
+
 }
+
+@Composable
+fun TextAndField(modifier: Modifier = Modifier,text: String){
+    Column(modifier = modifier) {
+        Text(
+            text = text,
+            fontSize = 18.sp
+        )
+        OutlinedTextField(
+            modifier = Modifier.padding(top = 10.dp),
+            value = text,
+            onValueChange = {  },
+            shape = RoundedCornerShape(8.dp),
+            )
+    }
+
+}
+
+
+
+
+
+//OutlinedTextField(
+//value = bio.value,
+//onValueChange = { bio.value = it },
+//modifier = Modifier.width(280.dp)
+//.height(90.dp)
+//.padding(start= 60.dp) ,
+//shape = RoundedCornerShape(8.dp),
+//label = {
+//    Text(
+//        text = "Напишите о себе",
+//        style = MaterialTheme.typography.bodyMedium
+//
+//    )
+//}
+//)
+
 
