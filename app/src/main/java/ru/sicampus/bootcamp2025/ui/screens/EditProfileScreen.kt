@@ -1,4 +1,5 @@
 package ru.sicampus.bootcamp2025.ui.screens
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -42,6 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import ru.sicampus.bootcamp2025.R
+import ru.sicampus.bootcamp2025.ui.viewModels.EditProfileViewModel
+import android.content.SharedPreferences
+import androidx.compose.ui.platform.LocalContext
 
 //@Preview(showBackground = true)
 //@Composable
@@ -53,8 +57,10 @@ import ru.sicampus.bootcamp2025.R
 fun EditProfileScreen(
     onCancel: () -> Unit,
     onSave: () -> Unit,
-    toProfileScreen: () -> Unit
+    toProfileScreen: () -> Unit,
+    viewModel: EditProfileViewModel
 ) {
+
     Column(modifier = Modifier.fillMaxSize()) {
 
         Column(modifier = Modifier.fillMaxSize().weight(2f).background(Color(0xFFC37B5C))) {
@@ -108,41 +114,55 @@ fun EditProfileScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            TextAndField(modifier = Modifier.padding(top = 30.dp), text = "Имя")
+            TextAndField(
+                modifier = Modifier.padding(top = 30.dp),
+                label = "Имя",
+                value = viewModel.firstName.value,
+                onValueChange = { viewModel.firstName.value = it }
+            )
 
-            TextAndField(modifier = Modifier.padding(top = 30.dp), text = "Фамилия")
+            TextAndField(
+                modifier = Modifier.padding(top = 30.dp),
+                label = "Фамилия",
+                value = viewModel.lastName.value,
+                onValueChange = { viewModel.lastName.value = it }
+            )
 
-            TextAndField(modifier = Modifier.padding(top = 30.dp), text = "Возраст")
+            // Возраст
+            TextAndField(
+                modifier = Modifier.padding(top = 30.dp),
+                label = "Возраст",
+                value = viewModel.age.value,
+                onValueChange = { viewModel.age.value = it }
+            )
 
-            TextAndField(modifier = Modifier.padding(top = 30.dp), text = "Стаж")
+            // Стаж
+            TextAndField(
+                modifier = Modifier.padding(top = 30.dp),
+                label = "Стаж",
+                value = viewModel.experience.value,
+                onValueChange = { viewModel.experience.value = it }
+            )
 
-            TextAndField(modifier = Modifier.padding(top = 30.dp), text = "О себе")
+            // О себе
+            TextAndField(
+                modifier = Modifier.padding(top = 30.dp),
+                label = "О себе",
+                value = viewModel.aboutMe.value,
+                onValueChange = { viewModel.aboutMe.value = it }
+            )
 
 
             Spacer(Modifier.size(40.dp))
             Row(Modifier.fillMaxSize(), horizontalArrangement = Arrangement.SpaceAround) {
                 Button(
-                    onClick = {}, //onSave,
-                    modifier = Modifier.width(140.dp)
-                        .height(40.dp).clickable {
-                            onCancel()
+                    onClick = {
+                        viewModel.saveProfile()
+                        onSave()
                         },
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = Color(0xFFC94027),
-                        contentColor = Color.White,
-                        disabledContainerColor = Color.LightGray,
-                        disabledContentColor = Color.Gray
-                    ),
-                    shape = RoundedCornerShape(8.dp))
-                {
-                    Text("Отменить")
-                }
-                Button(
-                    onClick = {}, //onSave,
                     modifier = Modifier.width(140.dp)
                         .height(40.dp)
                         .clickable {
-                            onSave()
                         },
                     colors = ButtonDefaults.outlinedButtonColors(
                         containerColor = Color(0xFF47A76A),
@@ -158,33 +178,24 @@ fun EditProfileScreen(
 
             Spacer(Modifier.size(40.dp))
         }
-
-
-
     }
-
-
-
-
 }
 
 @Composable
-fun TextAndField(modifier: Modifier = Modifier,text: String){
+fun TextAndField(modifier: Modifier = Modifier, label: String, value: String, onValueChange: (String) -> Unit) {
     Column(modifier = modifier) {
         Text(
-            text = text,
+            text = label,
             fontSize = 18.sp
         )
         OutlinedTextField(
             modifier = Modifier.padding(top = 10.dp),
-            value = text,
-            onValueChange = {  },
+            value = value,
+            onValueChange = onValueChange,
             shape = RoundedCornerShape(8.dp),
-            )
+        )
     }
-
 }
-
 
 
 
