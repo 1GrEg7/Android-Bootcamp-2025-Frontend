@@ -95,4 +95,14 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
     implementation("com.google.code.gson:gson:2.8.9")
 
+    // Для работы с Google Maps SDK для Android
+    implementation ("com.google.android.gms:play-services-maps:18.0.2")
+
+    // Для работы с Google Maps через Jetpack Compose
+    implementation ("com.google.maps.android:maps-compose:2.6.0")
+
+    // Для работы с Play Services Location (если используете геолокацию)
+    implementation ("com.google.android.gms:play-services-location:18.0.0")
+
+
 }
