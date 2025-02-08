@@ -55,7 +55,6 @@ import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun EditProfileScreen(
-    onCancel: () -> Unit,
     onSave: () -> Unit,
     toProfileScreen: () -> Unit,
     viewModel: EditProfileViewModel

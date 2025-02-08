@@ -135,9 +135,15 @@ fun MapScreen(
 
                 Box(
                     modifier = Modifier.padding(16.dp)
-                ){
-                    findAllCentersWithDistances(currentLocation,cent)
+                ) {
+                    currentLocation?.let {
+                        val centersWithDistances = findAllCentersWithDistances(it, cent)
+                        centersWithDistances.forEach { distance ->
+                            Text(text = distance)
+                        }
+                    }
                 }
+
 
 
             }
