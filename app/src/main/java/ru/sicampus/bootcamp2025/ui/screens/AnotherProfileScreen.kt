@@ -22,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,11 +33,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.sicampus.bootcamp2025.R
 import ru.sicampus.bootcamp2025.ui.buildComponents.BottomMenu
 import ru.sicampus.bootcamp2025.ui.buildComponents.BuildComponentsViewModel
-import ru.sicampus.bootcamp2025.ui.viewModels.EditProfileViewModel
+import ru.sicampus.bootcamp2025.ui.viewModels.AnotherProfileViewModel
 
 //@Preview(showBackground = true)
 //@Composable
@@ -45,14 +45,10 @@ import ru.sicampus.bootcamp2025.ui.viewModels.EditProfileViewModel
 //}
 
 @Composable
-fun ProfileScreen(
-    onEditClick: () -> Unit,
-    toAuthorizationScreen: () -> Unit,
-    toProfileScreen: () -> Unit,
+fun AnotherProfileScreen(
     toListScreen: () -> Unit,
-    toMapScreen: () -> Unit,
-    bottomMenuViewModel: BuildComponentsViewModel,
-    vm: EditProfileViewModel
+    anotherProfileViewModel: AnotherProfileViewModel
+
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
 
@@ -69,7 +65,7 @@ fun ProfileScreen(
                         modifier = Modifier.clickable {
                             toListScreen()
                         }
-                        )
+                    )
                 }
 
                 Box(
@@ -81,20 +77,7 @@ fun ProfileScreen(
                         fontSize = 30.sp)
                 }
 
-                Box(
-                    modifier = Modifier.fillMaxSize().weight(1f),
-                    contentAlignment = Alignment.Center
-                ){
-                    Icon(
-                        painter = painterResource(R.drawable.g2151),
-                        contentDescription = "",
-                        tint = Color.White,
-                        modifier = Modifier.clickable {
-                            onEditClick()
-                        }
-
-                    )
-                }
+                Box(modifier = Modifier.fillMaxSize().weight(1f))
 
             }
 
@@ -111,9 +94,9 @@ fun ProfileScreen(
                 contentAlignment = Alignment.Center
             ){
                 Text(
-                    text = "${vm.firstName.value} ${vm.lastName.value} ",
+                    text = anotherProfileViewModel.name.value,
                     fontSize = 18.sp
-                    )
+                )
 
             }
             Row(
@@ -131,7 +114,7 @@ fun ProfileScreen(
                     contentAlignment = Alignment.Center
                 ){
                     Text(
-                        text = "Стаж: ${vm.experience.value}г",
+                        text = "Cтаж: ${anotherProfileViewModel.experience.value}г",
                         fontSize = 18.sp)
                 }
                 Box(
@@ -141,27 +124,18 @@ fun ProfileScreen(
             Box(
                 modifier = Modifier.fillMaxSize().weight(0.2f),
 
-            )
+                )
 
         }
 
         Column(modifier = Modifier.fillMaxSize().weight(4f).background(Color.White)) {
             Column(modifier = Modifier.padding(40.dp)) {
-                InfoItem("Электронная почта", "example@mail.ru")
-                InfoItem("Возраст", vm.age.value)
-                InfoItem("О себе", vm.aboutMe.value)
+                InfoItem("Электронная почта", anotherProfileViewModel.email.value)
+                InfoItem("Возраст", anotherProfileViewModel.age.value.toString())
+                InfoItem("О себе", anotherProfileViewModel.bio.value)
 
             }
         }
-
-        BottomMenu(
-           // toMapScreen =  toMapScreen,
-            toProfileScreen = { toProfileScreen() } ,
-            toAuthorizationScreen = { toAuthorizationScreen() },
-            toListScreen = { toListScreen() },
-            vm = bottomMenuViewModel,
-            toMapScreen = {toMapScreen()}
-        )
 
     }
 
@@ -171,19 +145,4 @@ fun ProfileScreen(
 
 
 
-@Composable
-fun InfoItem(title: String, text: String) {
-    Text(
-        text = title,
-        fontSize = 18.sp,
-        color = Color.Gray.copy(0.7f)
-        )
-    Spacer(modifier = Modifier.size(8.dp))
-    Text(
-        text = text,
-        fontSize = 18.sp,
-        color = Color.Black.copy(0.7f)
-    )
-    Spacer(modifier = Modifier.size(15.dp))
-}
 

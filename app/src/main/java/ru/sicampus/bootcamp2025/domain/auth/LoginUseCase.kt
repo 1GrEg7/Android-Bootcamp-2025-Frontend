@@ -6,6 +6,7 @@ class LoginUseCase(
     suspend fun invoke(login: String, password:String):Result<Unit>{
         return authRepo.login(login,password).mapCatching {
             authRepo.login(login,password)
+
         }
     }
 }

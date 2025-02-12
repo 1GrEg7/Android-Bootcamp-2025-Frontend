@@ -92,4 +92,23 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(kotlin("script-runtime"))
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.google.code.gson:gson:2.8.9")
+
+    // Для работы с Google Maps SDK для Android
+    implementation ("com.google.android.gms:play-services-maps:18.0.2")
+
+    // Для работы с Google Maps через Jetpack Compose
+    implementation ("com.google.maps.android:maps-compose:2.6.0")
+
+    // Для работы с Play Services Location (если используете геолокацию)
+    implementation ("com.google.android.gms:play-services-location:18.0.0")
+
+
+    implementation ("io.ktor:ktor-client-core:2.2.4")
+
+    // Движок для Android
+    implementation ("io.ktor:ktor-client-android:2.2.4")
+
+
 }

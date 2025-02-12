@@ -133,14 +133,14 @@ fun AuthorizationScreen(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.Top
         ){
-            Text(fontSize = 16.sp, text = "Нет аккаунта")
+            Text(fontSize = 16.sp, text = "Нет аккаунта?")
 
             Text(modifier = Modifier
                 .clickable {
                     toRegistreScreen()
             },
                 fontSize = 16.sp,
-                text = "Зарегестрироваться")
+                text = "Зарегистрироваться")
         }
 
         Box(modifier = Modifier.fillMaxSize().weight(6f)){
